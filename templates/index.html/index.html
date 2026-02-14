@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Churn Prediction</title>
+</head>
+
+<body>
+
+<h2>Customer Churn Prediction</h2>
+
+<form action="http://127.0.0.1:5000/predict" method="POST">
+
+    Gender (0 Female, 1 Male)<br>
+    <input type="text" name="gender"><br><br>
+
+    Senior Citizen (0 No, 1 Yes)<br>
+    <input type="text" name="senior"><br><br>
+
+    Partner (0 No, 1 Yes)<br>
+    <input type="text" name="partner"><br><br>
+
+    Dependents (0 No, 1 Yes)<br>
+    <input type="text" name="dependents"><br><br>
+
+    Tenure<br>
+    <input type="text" name="tenure"><br><br>
+
+    Monthly Charges<br>
+    <input type="text" name="monthly"><br><br>
+
+    Total Charges<br>
+    <input type="text" name="total"><br><br>
+
+    <input type="submit" value="Predict">
+
+</form>
+
+
+
+
+    <h3 id="result"></h3>
+
+<script>
+function predict(){
+
+    let data = {
+        features: [
+            Number(document.getElementById("f1").value),
+            Number(document.getElementById("f2").value),
+            Number(document.getElementById("f3").value),
+            Number(document.getElementById("f4").value),
+            Number(document.getElementById("f5").value),
+            Number(document.getElementById("f6").value),
+            Number(document.getElementById("f7").value)
+        ]
+    };
+
+    fetch("http://127.0.0.1:5000/predict", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+})
+.then(res => res.json())
+.then(res => {
+    document.getElementById("result").innerHTML =
+        "Prediction: " + res["Churn Prediction"];
+});
+
+
+}
+</script>
+
+</body>
+</html>

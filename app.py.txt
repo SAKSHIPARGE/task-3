@@ -1,0 +1,29 @@
+from flask import Flask, request, jsonify
+import pickle
+import numpy as np
+
+app = Flask(__name__)
+
+model = pickle.load(open("model/churn_model.pkl", "rb"))
+
+@app.route("/")
+def home():
+    return "Customer Churn Prediction API is Running"
+
+@app.route("/predict", methods=["POST"])
+def predict():
+    try:
+        data = request.json["features"]
+        data = np.array(data).reshape(1, -1)
+        prediction = model.predict(data)[0]
+
+        return jsonify({
+            "Churn Prediction": int(prediction)
+        })
+
+    except Exception as e:
+        return jsonify({"Error": str(e)})
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
